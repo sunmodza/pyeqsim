@@ -51,3 +51,6 @@ plt.show()
 ```
 ### 6. Enjoy the result
 ![image](https://user-images.githubusercontent.com/62195081/225412376-0189f100-b10b-4c88-9146-c8fa2c2fe67a.png)
+
+
+## Write your own solution if you can this library definitely not the fastest solution
