@@ -32,9 +32,10 @@ dy = 0.00001
 ```
 
 ### 4. Define Relationships with system <= ....
+  Differiential Equation Or the equation represent system transformation
+  
+  you can also define multiple relation ships if want to
 ```
-# Differiential Equation Or the equation represent system transformation
-# you can define multiple relation ships if want to
 system <= "d**2T/dx**2 + d**2T/dy**2 - Q/k = 0"
 ```
 
