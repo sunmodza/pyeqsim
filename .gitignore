@@ -1,0 +1,9 @@
+main2.py
+main3.py
+/pyeqsim.egg-info
+/build
+/dist
+/.vscode
+/__pycache__
+
+/*/__pycache__
