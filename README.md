@@ -1,6 +1,7 @@
 # pyeqsim
 
-## This Library will make simulating equation system easier in 3 steps
+## This Library will make simulating equation system super duper easy
+## Offer super simple interface and highly customize
 
 ### 1. Import dependencies
 ```
