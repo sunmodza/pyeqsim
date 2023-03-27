@@ -11,7 +11,7 @@ Q = Variable((60, 60),boundary_condition=Continuous(),args_name=["x","y"],initia
 
 # define initial condition
 T.initial_condition[45:50, 45:50] = 100
-Q.initial_condition[:, 45:55] = 100000
+Q.initial_condition[:, 45:55] = 100
 Q.initial_condition[45:55, :] = 0
 
 # define constant
@@ -22,12 +22,12 @@ dy = 0.00001
 
 # Insert Equation Into system
 system <= "d**2T/dx**2 + d**2T/dy**2 - Q/k = 0"
-
+print(system.eqs[0].transformed_eq)
 # simulate
 for i in range(10000):
     system.simulate()
     T.opti()
     T.viz()
-    plt.pause(0.001)
+    plt.pause(0.01)
     plt.cla()
 plt.show()

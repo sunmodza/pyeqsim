@@ -11,7 +11,10 @@ import inspect
 import time
 from numpy import cos
 #from boundary import Boundary,Constant,Continuous
-from pyeqsim.boundary import Boundary,Constant,Continuous
+try:
+    from pyeqsim.boundary import Boundary,Constant,Continuous
+except ModuleNotFoundError:
+    from boundary import Boundary,Constant,Continuous
 #from numba import njit,int32,float32
 
 x = "x"
@@ -116,19 +119,25 @@ def find_add_one_solve(eq):
     return False
 
 def return_solved_equation(eq):
-    print("ASDDDDDDDDDDDDDDDDDDDD")
+    #print("ASDDDDDDDDDDDDDDDDDDDD")
     eq,solve_fields,variables = transformation(eq)
-    print(solve_fields,variables)
+    #print(solve_fields,variables)
     #raise NotImplementedError
     pfsolve = None
     pf = "HJIK"
     to_same = {}
+    saewae = True in ["+1" in i for i in solve_fields]
+    #print("ASDASJIODASDAS(D AS)", saewae)
     for i,v in enumerate(variables):
         vnew = pf+str(range(len(variables))[i])
         to_same[vnew] = v
         eq = eq.replace(v,vnew)
-        if v in solve_fields and find_add_one_solve(v):
-            pfsolve = vnew
+        #print(solve_fields,v)
+        if v in solve_fields:
+            if saewae and find_add_one_solve(v):
+                pfsolve = vnew
+            else:
+                pfsolve = vnew
         psb = vnew
         exec(f'{vnew} = sp.Symbol(vnew)')
     
@@ -148,14 +157,14 @@ def return_solved_equation(eq):
     #print(cse)
     #print(cse)
     ans = str(sp.solve(cse,sp.Symbol(pfsolve))[0]).replace(" ","")
-    
+    #print("ASDSAD ")
     #ans = str(sp.solve(f'({to_solve[0]})-({to_solve[1]})',sp.Symbol(pfsolve))[0]).replace(" ","")
     ans = f'{pfsolve}={ans}'
-
+    
 
     for v in to_same:
         ans = ans.replace(v,to_same[v])
-
+    print(ans,pfsolve,"SADASDq3",to_same)
     return ans
 
 
@@ -568,7 +577,7 @@ class System:
                 obj_v_siew = caller_frame.f_locals.get(v_siew)
                 if isinstance(obj_v_siew,Variable):
                     asdasd = eval(f"{v_siew}.being_set")
-                    print(asdasd)
+                    #print(asdasd)
                     if asdasd:
                         #print(f"{v_siew}.opti()")
                         eval(f"{v_siew}.opti()")
@@ -616,19 +625,19 @@ if __name__ == "__main__2":
     plt.show()
 
 
-if __name__ == "__main__3":
+if __name__ == "__main__":
 
     system = System()
 
     T = Variable((100, 100),boundary_condition=Continuous(),args_name=["x","y"],initial_value=10)
     T.initial_condition[45:50, 45:50] = 100
 
-    Q = Variable((100, 100),boundary_condition=Continuous(),args_name=["x","y"],initial_value=1)
-    Q.initial_condition[:, 45:55] = 100000
-    Q.initial_condition[45:55, :] = 0
+    Q = Variable((100, 100),boundary_condition=Continuous(),args_name=["x","y"],initial_value=100)
+    #Q.initial_condition[:, 45:55] = 0
+    #Q.initial_condition[45:55, :] = 0
     
     dx = 0.00001
-    k = 1
+    k = 0.001
     q = 1
     dy = 0.00001
 
@@ -636,11 +645,12 @@ if __name__ == "__main__3":
     #print(eval("d**2T/dx**2 + d**2T/dy**2 - Q/k = 0"))
 
     system <= "d**2T/dx**2 + d**2T/dy**2 - Q/k = 0"
-
+    print(system.eqs[0].transformed_eq)
     for _ in range(10000):
         system.simulate()
         T.viz()
-        plt.pause(0.01)
+        T.opti()
+        plt.pause(0.1)
         plt.cla()
     plt.show()
 
